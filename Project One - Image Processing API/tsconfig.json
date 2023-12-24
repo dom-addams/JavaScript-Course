@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "esModuleInterop": true,
+      "target": "es5",
+      "module": "commonjs",
+      "lib": ["ES6"],
+      "outDir": "./build",
+      "strict": true,
+      "noImplicitAny": true
+    },
+    "exclude": ["node_modules"]
+}
+  
