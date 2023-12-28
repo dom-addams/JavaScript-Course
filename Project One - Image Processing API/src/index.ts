@@ -1,5 +1,5 @@
 // Import Modules
-import express, { Request, Response } from 'express'; // Import Express Framework
+import express, { Request, Response, response } from 'express'; // Import Express Framework
 import routes from './routes/routes'; // Import routes
 import logger from './utilities/logger'; // Import logger middleware
 import { existsSync, promises as fs } from 'fs'; // Import File System module
@@ -36,7 +36,7 @@ app.get('/home', logger, (req, res) => {
 ////////////////////////////////
 //// IMAGE RESIZE VARIABLES ////
 ////////////////////////////////
-const ImagePath = path.join(__dirname, '../images/original/');
+const ImagePath = path.join(__dirname, '../images/');
 const resizedImagePath = path.join(__dirname, '../images/resized/');
 
 // image parameters
@@ -44,23 +44,16 @@ let imageWidth: number;
 let imageHeight: number;
 let filename: string;
 
-// filename array
-const filenameArray = [
-  'encenadaport',
-  'fjord',
-  'palmtunnel',
-  'santamonica',
-  'timetable',
-  'waterfall'
-];
 
 ///////////////////////////////
 //// IMAGE RESIZE FUNCTION ////
 ///////////////////////////////
 // Resize image function
 const resizeImage = async (filename: string, imageWidth: number, imageHeight: number) => {
+  const image = path.join(`${ImagePath}`, `${filename}.jpg`);
+  console.log(`ResizeFunction --> Filename: ${filename} and path is ${image}`);
   try {
-    return await sharp(path.join(`${ImagePath}`, `${filename}`, '.jpg'))
+    return await sharp(image)
       .resize({ width: imageWidth, height: imageHeight })
       .toFile(path.join(`${resizedImagePath}`, `${filename}_${imageWidth}x${imageHeight}.jpg`));
   } catch (err) {
@@ -117,30 +110,36 @@ const imageProcessor = (
 
 // Check original image exists and return boolean true or false
 const originalImageExistsCheck = (filename: string): boolean => {
-  if (existsSync(path.join(`${ImagePath}`, `${filename}.jpg`)) === false) {
-    console.log('Image does not exist');
-    return false;
-  } else {
-    console.log('Image exists');
+  const image = path.join(`${ImagePath}`, `${filename}.jpg`);
+  if (existsSync(image) === true) {
+    console.log(`Original image exists at ${image}`);
     return true;
+  } else {
+    console.log(`Original image does not exist at ${image}`);
+    return false;
   }
 };
 
-// Check image has been resized and return boolean true or false
+// Check resized image exists and return boolean true or false
 const resizedImageExistsCheck = (filename: string): boolean => {
-  if (existsSync(path.join(`${resizedImagePath}`, `${filename}.jpg`)) === false) {
-    console.log('Image does not exist');
+  const image = path.join(`${resizedImagePath}`, `${filename}_${imageWidth}x${imageHeight}.jpg`);
+  try {
+    if (existsSync(image) === true) {
+      console.log(`Resized image exists at ${image}`);
+      return true;
+    } else {
+      console.log(`Resized image does not exist at ${image}`);
+      return false;
+    }
+  } catch {
     return false;
-  } else {
-    console.log('Image exists');
-    return true;
   }
 };
 
-// Check filename is valid and return boolean true or false
+// Check filename/width/height are valid and return boolean true or false
 const inputValidationCheck = (filename: string, imageWidth: number, imageHeight: number, res: Response) => {
   const Regex = /^[A-Za-z0-9]+$/;
-  if (Regex.test(filename) === false || filenameArray.includes(filename) === false) {
+  if (Regex.test(filename) === false) {
     return 'Filename is not valid';
   } else if ((imageWidth === 0) || (isNaN(imageWidth))) {
     return 'Image width is not valid';
@@ -159,15 +158,15 @@ const inputValidationCheck = (filename: string, imageWidth: number, imageHeight:
 ///////////////////////////////
 
 // Resize image endpoint with validation using nested if else statements
-app.get('/resize', logger, (req: Request, res: Response) => {
-  filename = (req.query.filename as string);
+app.get('/resize', (req: Request, res: Response) => {
+  filename = String(req.query.filename);
   imageWidth = Number(req.query.width);
   imageHeight = Number(req.query.height);
   try {
     imageProcessor(filename, imageWidth, imageHeight, res);
   } catch {
     res.status(500).send("Oops! Something went wrong");
-  }
+  }  
 });
 
 
