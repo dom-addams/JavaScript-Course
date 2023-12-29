@@ -89,7 +89,7 @@ describe('GET /api/resize', function () {
 });
 // Test the /api/resize route with wrong filename query string
 describe('GET /api/resize', function () {
-    it('should return 400 status when missing query string', function () { return __awaiter(void 0, void 0, void 0, function () {
+    it('should return 404 status when missing query string', function () { return __awaiter(void 0, void 0, void 0, function () {
         var response;
         return __generator(this, function (_a) {
             switch (_a.label) {

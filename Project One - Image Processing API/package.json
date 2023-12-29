@@ -20,19 +20,19 @@
     "eslint": "^8.8.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "@types/express": "^4.17.21",
     "nodemon": "^3.0.2",
     "supertest": "^6.1.6",
     "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
-  },
-  "dependencies": {
-    "@types/express": "^4.17.21",
-    "express": "^4.18.2",
-    "fs": "^0.0.1-security",
+    "typescript": "^5.3.3",
     "jasmine": "^3.6.4",
     "jasmine-core": "^5.1.1",
+    "prettier": "^2.5.1"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
     "jasmine-spec-reporter": "^7.0.0",
-    "prettier": "^2.5.1",
+    "fs": "^0.0.1-security",
     "sharp": "^0.32.6"
   }
 }

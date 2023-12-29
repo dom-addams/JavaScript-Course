@@ -35,7 +35,7 @@ describe('check if filename/width/height are valid', function () {
 });
 // Test the resizeImage function and expect it to create a new image
 describe('check if resized image is created', function () {
-    it('Resized image should be create it ../../THUMB folder if successfull', function () {
+    it('Resized image should be create it THUMB folder if successfull', function () {
         // call resizeImage function with waterfall image
         (0, processor_1.resizeImage)('waterfall', 1000, 700);
         // check if image exists in ../../THUMB folder

@@ -68,9 +68,9 @@ const inputValidationCheck = (
   const Regex = /^[A-Za-z0-9]+$/;
   if (Regex.test(filename) === false) {
     return 'Filename is not valid';
-  } else if (imageWidth === 0 || isNaN(imageWidth)) {
+  } else if (imageWidth <= 0 || isNaN(imageWidth)) {
     return 'Image width is not valid';
-  } else if (imageHeight === 0 || isNaN(imageHeight)) {
+  } else if (imageHeight <= 0 || isNaN(imageHeight)) {
     return 'Image height is not valid';
   } else if (
     filename === undefined ||
