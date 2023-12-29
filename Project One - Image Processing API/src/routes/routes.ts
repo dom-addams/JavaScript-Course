@@ -1,16 +1,23 @@
-import express from 'express'; // import express
-import images from './pages/images'; // import images route
+import express, { Request, Response } from 'express'; // Import Express
+import imageRoute from './api/images'; // import images route
+import path from 'path'; // Import path module
 
 // set express router to routes
 const routes = express.Router();
 
-// define route
-routes.get('/', (req, res) => {
-  res.send('Dom Second Page!');
+///////////////////////////////
+//// SERVE HOMEPAGE CONFIG ////
+///////////////////////////////
+routes.get('/', (req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, '../../HTML/index.html'));
+  res.status(200);
+  console.log('Showing Homepage');
 });
 
-// Use images route
-routes.use('/images', images);
+////////////////////////////
+//// SERVE IMAGE RESIZE ////
+////////////////////////////
+routes.use('/resize', imageRoute);
 
-// export routes
+// Export routes
 export default routes;

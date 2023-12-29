@@ -3,11 +3,10 @@
       "esModuleInterop": true,
       "target": "es5",
       "module": "commonjs",
-      "lib": ["ES6"],
+      "lib": ["ES6", "DOM"],
       "outDir": "./build",
       "strict": true,
       "noImplicitAny": true
     },
-    "exclude": ["node_modules"]
+    "exclude": ["node_modules", "tests"]
 }
-  
