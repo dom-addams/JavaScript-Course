@@ -1,0 +1,9 @@
+{
+    "dev": {
+      "driver": "pg",
+      "host": "127.0.0.1",
+      "database": "dom_db",
+      "user": "dominic",
+      "password": "password"
+    }
+}
