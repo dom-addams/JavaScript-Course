@@ -4,13 +4,13 @@ import { Pool } from 'pg';
 dotenv.config();
 
 const {
-  DB_HOST,
-  DEV_DB,
-  TEST_DB,
-  DEV_DB_USER,
-  DEV_DB_PASSWORD,
-  TEST_DB_USER,
-  TEST_DB_PASSWORD,
+  POSTGRES_HOST,
+  POSTGRES_DB,
+  POSTGRES_TEST_DB,
+  POSTGRES_USER,
+  POSTGRESS_TEST_USER,
+  POSTGRES_PASSWORD,
+  POSTGRES_TEST_PASSWORD,
   ENV
 } = process.env;
 
@@ -18,19 +18,19 @@ let db_pool: Pool = new Pool();
 
 if (ENV === 'dev') {
   db_pool = new Pool({
-    host: DB_HOST,
-    database: DEV_DB,
-    user: DEV_DB_USER,
-    password: DEV_DB_PASSWORD
+    host: POSTGRES_HOST,
+    database: POSTGRES_DB,
+    user: POSTGRES_USER,
+    password: POSTGRES_PASSWORD
   });
 }
 
 if (ENV === 'test') {
   db_pool = new Pool({
-    host: DB_HOST,
-    database: TEST_DB,
-    user: TEST_DB_USER,
-    password: TEST_DB_PASSWORD
+    host: POSTGRES_HOST,
+    database: POSTGRES_TEST_DB,
+    user: POSTGRESS_TEST_USER,
+    password: POSTGRES_TEST_PASSWORD
   });
 }
 

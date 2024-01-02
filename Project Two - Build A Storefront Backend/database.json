@@ -2,8 +2,8 @@
     "dev": {
       "driver": "pg",
       "host": "127.0.0.1",
-      "database": "dom_db",
-      "user": "dominic",
+      "database": "storefront_dev",
+      "user": "store_dev",
       "password": "password"
     }
 }

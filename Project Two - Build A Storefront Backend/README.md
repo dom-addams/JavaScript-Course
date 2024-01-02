@@ -24,7 +24,9 @@
 	* Figure out command for `UP` and `DOWN` for the migration sql files
 
 > Run `db-migrate create [TABLE-NAME] --sql-file` to create `migration` folder 
+
 > Bring the migration up `db-migrate up`
+
 > Bring the migration down `db-migrate down`
 
 ### Create DB MODELS files

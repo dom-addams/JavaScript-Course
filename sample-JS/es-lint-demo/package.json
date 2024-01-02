@@ -1,0 +1,19 @@
+{
+  "name": "my-project",
+  "version": "1.0.0",
+  "description": "NPM Project running eslint and prettier",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --ext .js",
+    "prettier": "prettier --config .prettierrc '*.js' --write"
+  },
+  "author": "dom",
+  "license": "ISC",
+  "dependencies": {
+    "eslint": "^8.8.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.5.1"
+  }
+}
