@@ -11,7 +11,7 @@ export type User = {
 
 // Export UserStore class
 export class UserStore {
-  // Index method
+  // Get all users
   async index(): Promise<User[]> {
     try {
       const conn = await db_pool.connect();
@@ -27,8 +27,8 @@ export class UserStore {
     }
   }
 
-  // Show method
-  async show(id: string): Promise<User> {
+  // Get user by user id
+  async showUser(id: string): Promise<User> {
     try {
       const conn = await db_pool.connect();
       const sql = 'SELECT * FROM users WHERE id=($1)';
@@ -43,7 +43,7 @@ export class UserStore {
     }
   }
 
-  // Create method
+  // Create new user
   async create(u: User): Promise<User> {
     try {
       const conn = await db_pool.connect();
@@ -66,8 +66,8 @@ export class UserStore {
     }
   }
 
-  // Update method
-  async update(u: User): Promise<User> {
+  // Update user
+  async update(u: User, id: string): Promise<User> {
     try {
       const conn = await db_pool.connect();
       const sql =
@@ -77,7 +77,7 @@ export class UserStore {
         u.first_name,
         u.last_name,
         u.password,
-        u.id
+        id
       ]);
 
       const user = result.rows[0];
@@ -86,11 +86,11 @@ export class UserStore {
 
       return user;
     } catch (err) {
-      throw new Error(`Could not update user ${u.id}. Error: ${err}`);
+      throw new Error(`Could not update user ${id}. Error: ${err}`);
     }
   }
 
-  // Delete method
+  // Delete user
   async delete(id: string): Promise<User> {
     try {
       const conn = await db_pool.connect();
