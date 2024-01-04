@@ -77,14 +77,14 @@ These are the notes from a meeting with the frontend developer that describe wha
 * Password `:String`
 
 ### Orders
-* ID
-* User_ID
-* Status
+* ID `:Number`
+* User_ID [Foreign Key] `:Number`
+* Status `Boolean`
 
 ### Order_Info
-* ID
-* User_ID [Foreign Key]
-* Order_ID [Foreign Key]
-* Quantity
+* ID `:Number`
+* User_ID [Foreign Key] `:Number`
+* Order_ID [Foreign Key] `:Number`
+* Quantity `:Number`
 
 -----END OF FILE------
