@@ -2,7 +2,7 @@
 import db_pool from '../database';
 
 // Export Order Type and Use ? for the id to be optional
-export type Order = { id?: number; status: string; user_id: number };
+export type Order = { id?: number; status: boolean; user_id: number };
 
 // Export OrderInfo Type and use ? for the id to be optional
 export type OrderInfo = {
@@ -43,15 +43,15 @@ export class OrderStore {
   // Create a new order
   async create(o: Order): Promise<Order> {
     try {
-      const conn = await db_pool.connect();
       const sql =
-        'INSERT INTO orders (status, user_id) VALUES($1, $2) RETURNING *';
-      const result = await conn.query(sql, [o.status, o.user_id]);
+        'INSERT INTO orders (user_id, status) VALUES($1, $2) RETURNING *';
+      const conn = await db_pool.connect();
+      const result = await conn.query(sql, [o.user_id, o.status]);
       const order = result.rows[0];
       conn.release();
       return order;
     } catch (err) {
-      throw new Error(`Could not add new order ${o.status}. Error: ${err}`);
+      throw new Error(`Could not add new order. ${err}`);
     }
   }
 
@@ -89,17 +89,23 @@ export class OrderStore {
   ////////////////////////
 
   // Add product to OrderInfo
-  async addProduct(o: OrderInfo): Promise<OrderInfo> {
+  async addProduct(oi: OrderInfo): Promise<OrderInfo> {
     try {
-      const conn = await db_pool.connect();
       const sql =
         'INSERT INTO order_info (order_id, product_id, quantity) VALUES($1, $2, $3) RETURNING *';
-      const result = await conn.query(sql, [o.id, o.product_id, o.quantity]);
+      const conn = await db_pool.connect();
+      const result = await conn.query(sql, [
+        oi.order_id,
+        oi.product_id,
+        oi.quantity
+      ]);
       const order = result.rows[0];
       conn.release();
       return order;
     } catch (err) {
-      throw new Error(`Could not add product to order ${o.id}. Error: ${err}`);
+      throw new Error(
+        `Could not add product ${oi.order_id} to orderInfo with order ${oi.order_id}. ${err}`
+      );
     }
   }
 

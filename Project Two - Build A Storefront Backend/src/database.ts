@@ -8,30 +8,21 @@ const {
   POSTGRES_DB,
   POSTGRES_TEST_DB,
   POSTGRES_USER,
-  POSTGRESS_TEST_USER,
+  POSTGRES_TEST_USER,
   POSTGRES_PASSWORD,
   POSTGRES_TEST_PASSWORD,
-  ENV
+  NODE_ENV
 } = process.env;
 
-let db_pool: Pool = new Pool();
+// Database configuration based on NODE_ENV
+const db_pool = new Pool({
+  host: POSTGRES_HOST,
+  database: NODE_ENV === 'dev' ? POSTGRES_DB : POSTGRES_TEST_DB,
+  user: NODE_ENV === 'dev' ? POSTGRES_USER : POSTGRES_TEST_USER,
+  password: NODE_ENV === 'dev' ? POSTGRES_PASSWORD : POSTGRES_TEST_PASSWORD
+});
 
-if (ENV === 'dev') {
-  db_pool = new Pool({
-    host: POSTGRES_HOST,
-    database: POSTGRES_DB,
-    user: POSTGRES_USER,
-    password: POSTGRES_PASSWORD
-  });
-}
-
-if (ENV === 'test') {
-  db_pool = new Pool({
-    host: POSTGRES_HOST,
-    database: POSTGRES_TEST_DB,
-    user: POSTGRESS_TEST_USER,
-    password: POSTGRES_TEST_PASSWORD
-  });
-}
+// Print NODE_ENV to console to confirm which environment is being used
+console.log(`ENV: ${NODE_ENV}`);
 
 export default db_pool;

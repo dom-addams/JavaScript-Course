@@ -101,7 +101,7 @@ const removeProduct = async (req: Request, res: Response) => {
 const product_routes = (app: express.Application) => {
   app.get('/products', indexProduct); // get all products
   app.get('/products/:id', showProduct); // get product by product id
-  app.get('/products/:category', showByCategory); // get product by product category
+  app.get('/products/category/:category', showByCategory); // get product by product category
   app.post('/products', createProduct); // create a new product
   app.put('/products/:id', updateProduct); // update a product
   app.delete('/products/:id', removeProduct); // delete a product

@@ -56,7 +56,20 @@
 * Move sensitive values to Hash
 	* Use bcrypt and salt to remove any "sensitive" values not already hidden
 
+```
+INSERT INTO users (first_name, last_name, password) VALUES('John','Doe','Password123');
+INSERT INTO products (name, price, category) VALUES ('Apples', 3.99, 'Food');
+INSERT INTO orders (user_id, status) VALUES (7, true);
+INSERT INTO order_info (order_id, product_id, quantity) VALUES(7,7,5) RETURNING *
 
+
+SELECT * FROM users
+SELECT * FROM products
+SELECT * FROM orders
+SELECT * FROM order_info
+
+-- TRUNCATE TABLE products CASCADE
+```
 
 
 

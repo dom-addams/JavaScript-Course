@@ -70,6 +70,7 @@ const removeOrder = async (req: Request, res: Response) => {
   try {
     const id = req.params.id; // get order id
     const deletedOrder = await store.delete(id); // delete order
+    res.status(200);
     res.json(deletedOrder); // send response
   } catch (err) {
     res.status(400);
@@ -88,11 +89,12 @@ const removeOrder = async (req: Request, res: Response) => {
 const addProduct = async (req: Request, res: Response) => {
   try {
     const oi: OrderInfo = {
-      order_id: Number(req.body.id), // get order id
-      product_id: Number(req.body.product_id), // get product id
-      quantity: Number(req.body.quantity) // get quantity
+      order_id: req.body.order_id, // get order id
+      product_id: req.body.product_id, // get product id
+      quantity: req.body.quantity // get quantity
     };
     const orderDetails = await store.addProduct(oi); // add product to order
+    res.status(200);
     res.json(orderDetails); // send response
   } catch (err) {
     res.status(400);
@@ -104,10 +106,12 @@ const addProduct = async (req: Request, res: Response) => {
 const indexOrderInfo = async (_req: Request, res: Response) => {
   try {
     const orderDetails = await store.indexOrderInfo(); // get all order details
-    res.json(orderDetails); // send response
+    res.status(200);
+    res.send(orderDetails); // send response
   } catch (err) {
+    console.error(err); // Log the error
     res.status(400);
-    res.json(err);
+    res.json(err); // Send the error message in the response
   }
 };
 
@@ -116,6 +120,7 @@ const deleteOrderInfo = async (req: Request, res: Response) => {
   try {
     const id = String(req.params.id); // get order id
     const deletedOrder = await store.deleteOrderInfo(id); // delete order
+    res.status(200);
     res.json(deletedOrder); // send response
   } catch (err) {
     res.status(400);
@@ -130,14 +135,13 @@ const deleteOrderInfo = async (req: Request, res: Response) => {
 // Configure routes for orders with express
 const order_routes = (app: express.Application) => {
   app.get('/orders', indexOrder); // get all orders
-  app.get('/orders/:id', showOrder); // get order by order id
+  app.get('/orders/details', indexOrderInfo); // get all order details
   app.post('/orders', createOrder); // create a new order
+  app.get('/orders/:id', showOrder); // get order by order id
   app.put('/orders/:id', updateOrder); // update an order
   app.delete('/orders/:id', removeOrder); // delete an order
-  // OrderInfo routes
   app.post('/orders/:id/products', addProduct); // add product to order
-  app.get('/order_info', indexOrderInfo); // get all order details
-  app.delete('/order_info/:id', deleteOrderInfo); // delete an order from order details
+  app.delete('/orders/:id/products', deleteOrderInfo); // delete an order from order details
 };
 
 // export order routes

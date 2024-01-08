@@ -3,9 +3,15 @@ import bodyParser from 'body-parser';
 import order_routes from './handlers/orders';
 import product_routes from './handlers/products';
 import user_routes from './handlers/users';
+import cors from 'cors';
 
 const app: express.Application = express();
 const address = '0.0.0.0:3000';
+
+const corsOptions = {
+  origin: '*',
+  optionsSuccessStatus: 200
+};
 
 app.use(bodyParser.json());
 
@@ -21,3 +27,6 @@ user_routes(app);
 app.listen(3000, function () {
   console.log(`starting app on: ${address}`);
 });
+
+// Export Express app
+export default app;
