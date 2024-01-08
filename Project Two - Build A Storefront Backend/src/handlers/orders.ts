@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express'; // import express
 import { Order, OrderInfo, OrderStore } from '../models/order'; // import order models
+import { verifyAuthToken } from '../utility/authenticate'; // import verifyAuthToken
 
 const store = new OrderStore(); // create new order store
 
@@ -23,11 +24,11 @@ const indexOrder = async (_req: Request, res: Response) => {
   }
 };
 
-// Get order by order id
+// Get order by user id
 const showOrder = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id; // get order id
-    const order = await store.showOrder(id); // get order by order id
+    const uID = req.params.user_id; // get order id
+    const order = await store.showOrder(uID); // get order by user id
     res.json(order); // send response
   } catch (err) {
     res.status(400);
@@ -137,7 +138,7 @@ const order_routes = (app: express.Application) => {
   app.get('/orders', indexOrder); // get all orders
   app.get('/orders/details', indexOrderInfo); // get all order details
   app.post('/orders', createOrder); // create a new order
-  app.get('/orders/:id', showOrder); // get order by order id
+  app.get('/orders/:id', verifyAuthToken, showOrder); // get order by order id
   app.put('/orders/:id', updateOrder); // update an order
   app.delete('/orders/:id', removeOrder); // delete an order
   app.post('/orders/:id/products', addProduct); // add product to order

@@ -8,8 +8,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Index 
 - Show
 - Create [token required]
-- [OPTIONAL] Top 5 most popular products 
-- [OPTIONAL] Products by category (args: product category)
+- Products by category (args: product category)
 
 ### Users
 - Index [token required]
@@ -31,9 +30,8 @@ These are the notes from a meeting with the frontend developer that describe wha
 ### Users
 * `GET` `/users` == Get all users
 * `GET` `/users/:id` == Get user by ID
-* `GET` `/users/token` == Get token for user ???
-* `POST` `/users/new` == Create new user
-* `POST` `/users/login` == Authenticate user ???
+* `POST` `/users/new` == Create new user ++ generate JWT
+* `POST` `/users/auth` == Authenticate user ???
 * `PUT` `/users/update/:id` == Update user with ID
 * `DELETE` `/users/:id` == Delete user with ID
 

@@ -32,7 +32,7 @@
 ### Create DB MODELS files
 * Create MODELS
 	* Create a modles folder in src/ to contain all methods for each table.
-	* Each model file should map to 1) Data Shapres & 2) Endpoints
+	* Each model file should map to 1) Data Shapes & 2) Endpoints
 
 ### Create DB HANDLER files
 * Create HANDLERS
@@ -43,34 +43,18 @@
 * Create JASMINE TESTS
 	* Create Unit and Integration tests for checking each endpoint against a "test db"
 
-### Implement JWTs
-* Implement JWTs
-	* Review `jsonwebtoken` module and add tokens for each required endpoint
-
 ### Implement CORS
 * Implement CORS
 	* Review how to setup CORS and allow "localhost" domain to avoid errors
 	* Apply CORS to all endpoints (done in server.ts file)
 
+### Implement JWTs
+* Implement JWTs
+	* Review `jsonwebtoken` module and add tokens for each required endpoint
+
 ### Other
 * Move sensitive values to Hash
 	* Use bcrypt and salt to remove any "sensitive" values not already hidden
-
-```
-INSERT INTO users (first_name, last_name, password) VALUES('John','Doe','Password123');
-INSERT INTO products (name, price, category) VALUES ('Apples', 3.99, 'Food');
-INSERT INTO orders (user_id, status) VALUES (7, true);
-INSERT INTO order_info (order_id, product_id, quantity) VALUES(7,7,5) RETURNING *
-
-
-SELECT * FROM users
-SELECT * FROM products
-SELECT * FROM orders
-SELECT * FROM order_info
-
--- TRUNCATE TABLE products CASCADE
-```
-
 
 
 

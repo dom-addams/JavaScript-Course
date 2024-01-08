@@ -22,7 +22,7 @@ const userStore = new UserStore();
 // INDEX all orders
 /////////
 // SHOW one user
-// SHOW one product by id
+// SHOW one product by user id
 // SHOW one product by category
 // SHOW one order
 /////////
@@ -107,7 +107,7 @@ describe('UNIT TEST ALL MODELS', () => {
       expect(result.first_name).toEqual('John');
       expect(result.last_name).toEqual('Doe');
     });
-    it('Should return the created product by id', async () => {
+    it('Should return the created product by ID', async () => {
       const result = await productStore.showProduct('2');
       expect(result.name).toEqual('Apples');
       expect(result.price).toEqual(3.99);
@@ -117,7 +117,7 @@ describe('UNIT TEST ALL MODELS', () => {
       const result = await productStore.showByCategory('Food');
       expect(result.length).toBeGreaterThan(0);
     });
-    it('Should return the created order', async () => {
+    it('Should return the created order by user ID', async () => {
       const result = await orderStore.showOrder('2');
       expect(result.status).toEqual(true);
       expect(result.user_id).toEqual(2);

@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express'; // import express
 import { Product, ProductStore } from '../models/product'; // import product models
+import { verifyAuthToken } from '../utility/authenticate';
 
 const store = new ProductStore(); // create new product store
 
@@ -55,7 +56,7 @@ const createProduct = async (req: Request, res: Response) => {
       name: req.body.name,
       price: req.body.price,
       category: req.body.category
-    };
+    }; // create new product
     const newProduct = await store.createProduct(product); // create new product
     res.json(newProduct); // send response
   } catch (err) {
@@ -102,7 +103,7 @@ const product_routes = (app: express.Application) => {
   app.get('/products', indexProduct); // get all products
   app.get('/products/:id', showProduct); // get product by product id
   app.get('/products/category/:category', showByCategory); // get product by product category
-  app.post('/products', createProduct); // create a new product
+  app.post('/products', verifyAuthToken, createProduct); // create a new product
   app.put('/products/:id', updateProduct); // update a product
   app.delete('/products/:id', removeProduct); // delete a product
 };

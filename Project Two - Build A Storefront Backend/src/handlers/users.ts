@@ -1,5 +1,7 @@
 import express, { Request, Response } from 'express'; // import express
 import { User, UserStore } from '../models/user'; // import user models
+import jwt from 'jsonwebtoken'; // import jsonwebtoken
+import { verifyAuthToken } from '../utility/authenticate';
 
 const store = new UserStore(); // create new user store
 
@@ -9,7 +11,7 @@ const store = new UserStore(); // create new user store
 // Index Users
 // showUser
 // Create User
-// Authenticate User -- TO BE COMPLETED
+// Authenticate User (pseudo login) -- TO BE COMPLETED
 // Update User
 // Delete User
 
@@ -45,7 +47,11 @@ const createUser = async (req: Request, res: Response) => {
       password: req.body.password
     }; // create new user
     const newUser = await store.create(user); // create new user
-    res.json(newUser); // send response
+    const token = jwt.sign(
+      { user: newUser },
+      process.env.TOKEN_SECRET as string
+    ); // create JWT token
+    res.json(token); // send response
   } catch (err) {
     res.status(400);
     res.json(err);
@@ -87,9 +93,9 @@ const removeUser = async (req: Request, res: Response) => {
 
 // Configure routes for users with express
 const user_routes = (app: express.Application) => {
-  app.get('/users', indexUser); // get all users
-  app.get('/users/:id', showUser); // get user by user id
-  app.post('/users', createUser); // create new user
+  app.get('/users', verifyAuthToken, indexUser); // get all users
+  app.get('/users/:id', verifyAuthToken, showUser); // get user by user id
+  app.post('/users', verifyAuthToken, createUser); // create new user
   app.put('/users/:id', updateUser); // update user
   app.delete('/users/:id', removeUser); // delete user
 };

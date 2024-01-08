@@ -27,16 +27,16 @@ export class OrderStore {
     }
   }
 
-  // Get all orders by order id
-  async showOrder(id: string): Promise<Order> {
+  // Get order by user id
+  async showOrder(uID: string): Promise<Order> {
     try {
       const conn = await db_pool.connect();
-      const sql = 'SELECT * FROM orders WHERE id=($1)';
-      const result = await conn.query(sql, [id]);
+      const sql = 'SELECT * FROM orders WHERE user_id=($1)';
+      const result = await conn.query(sql, [uID]);
       conn.release();
       return result.rows[0];
     } catch (err) {
-      throw new Error(`Could not find order ${id}. Error: ${err}`);
+      throw new Error(`Could not find order for user. Error: ${err}`);
     }
   }
 

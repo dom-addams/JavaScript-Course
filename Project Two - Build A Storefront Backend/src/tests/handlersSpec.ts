@@ -3,7 +3,26 @@ import app from '../server'; // import express app
 
 const request = supertest(app); // supertest agent
 
-// AUTH, JWT TO BE COMPLETED
+// AUTH TOKEN FOR TESTING
+import jwt from 'jsonwebtoken'; // import jsonwebtoken
+import { User } from '../models/user'; // import User model
+
+let token = ''; // declare token variable
+
+// Create a User and Token for testing beforeAll tests
+beforeAll(async () => {
+  const user: User = {
+    first_name: 'Mark',
+    last_name: 'Cavendish',
+    password: 'EliteCyclist123'
+  }; // create new user
+  const tmp_jwt = jwt.sign({ user }, process.env.TOKEN_SECRET as string); // create token
+  token = tmp_jwt; // assign tmp token to variable
+  console.log('Token: ', token); // log token to console
+});
+
+// Make token available to required tests
+export default token;
 
 ///////////////////////////////
 // HANDLER INTEGRATION TESTS //
@@ -38,19 +57,25 @@ describe('HANDLER INTEGRATION TESTS', () => {
   // CREATE INTEGRATION TESTS
   describe('CREATE HADLER TESTS', () => {
     it('Should create a new user', async () => {
-      const result = await request.post('/users').send({
-        first_name: 'Jane',
-        last_name: 'Ambers',
-        password: 'MyPassword123'
-      });
+      const result = await request
+        .post('/users')
+        .send({
+          first_name: 'Jane',
+          last_name: 'Ambers',
+          password: 'MyPassword123'
+        })
+        .set('Authorization', 'Bearer ' + token);
       expect(result.status).toBe(200);
     });
     it('Should create a new product', async () => {
-      const result = await request.post('/products').send({
-        name: 'Bananas',
-        price: 2.99,
-        category: 'Food'
-      });
+      const result = await request
+        .post('/products')
+        .send({
+          name: 'Bananas',
+          price: 2.99,
+          category: 'Food'
+        })
+        .set('Authorization', 'Bearer ' + token);
       expect(result.status).toBe(200);
     });
     it('Should create a new order', async () => {
@@ -76,7 +101,9 @@ describe('HANDLER INTEGRATION TESTS', () => {
   // INDEX INTEGRATION TESTS
   describe('INDEX HANDLER TESTS', () => {
     it('Should get all users', async () => {
-      const result = await request.get('/users');
+      const result = await request
+        .get('/users')
+        .set('Authorization', 'Bearer ' + token);
       expect(result.body.length).toBeGreaterThan(0);
       expect(result.status).toBe(200);
     });
@@ -118,7 +145,9 @@ describe('HANDLER INTEGRATION TESTS', () => {
   // SHOW INTEGRATION TESTS
   describe('SHOW HANDLER TESTS', () => {
     it('Should get the user with ID 1', async () => {
-      const result = await request.get('/users/1');
+      const result = await request
+        .get('/users/1')
+        .set('Authorization', 'Bearer ' + token);
       expect(result.body.first_name).toEqual('Jane');
       expect(result.body.last_name).toEqual('Ambers');
     });
@@ -135,8 +164,10 @@ describe('HANDLER INTEGRATION TESTS', () => {
       const result = await request.get('/products/category/Food');
       expect(result.body[0].category).toEqual('Food');
     });
-    it('Should get one order', async () => {
-      const result = await request.get('/orders/1');
+    it('Should get one order by user ID', async () => {
+      const result = await request
+        .get('/orders/1')
+        .set('Authorization', 'Bearer ' + token);
       expect(result.body).toEqual({
         id: 1,
         user_id: 1,
