@@ -9,6 +9,7 @@ const store = new OrderStore(); // create new order store
 ////////////////////
 // Index Orders
 // showOrder
+// showOrderStatus
 // Create Order
 // Update Order
 // Delete Order
@@ -27,10 +28,24 @@ const indexOrder = async (_req: Request, res: Response) => {
 // Get order by user id
 const showOrder = async (req: Request, res: Response) => {
   try {
-    const uID = req.params.user_id; // get order id
-    const order = await store.showOrder(uID); // get order by user id
+    const user_id = req.params.id; // get order id
+    const order = await store.showOrder(user_id); // get order by user id
     res.json(order); // send response
   } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
+};
+
+// Get order by user id and status
+const showOrderStatus = async (req: Request, res: Response) => {
+  try {
+    const user_id = req.params.id; // get order id
+    const status = req.params.status; // get status
+    const order = await store.showOrderStatus(user_id, status); // get order by user id and status
+    res.json(order); // send response
+  } catch (err) {
+    console.error(err); // Log the error
     res.status(400);
     res.json(err);
   }
@@ -139,6 +154,7 @@ const order_routes = (app: express.Application) => {
   app.get('/orders/details', indexOrderInfo); // get all order details
   app.post('/orders', createOrder); // create a new order
   app.get('/orders/:id', verifyAuthToken, showOrder); // get order by order id
+  app.get('/orders/:id/:status', verifyAuthToken, showOrderStatus); // get order by user id and status
   app.put('/orders/:id', updateOrder); // update an order
   app.delete('/orders/:id', removeOrder); // delete an order
   app.post('/orders/:id/products', addProduct); // add product to order

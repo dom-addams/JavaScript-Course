@@ -33,6 +33,8 @@ export default token;
 // CREATE Order via /orders
 // Add Order Details to OrderInfo Table via /orders/:id/products
 /////////
+// AUTHENTICATE User via /users/authenticate
+/////////
 // INDEX all users via /users
 // INDEX all products via /products
 // INDEX all orders via /orders
@@ -42,6 +44,7 @@ export default token;
 // SHOW one product by id via /products/:id
 // SHOW one product by category via /products/category/:category
 // SHOW one order via /orders/:id
+// SHOW one order by user id and status via /orders/:id/:status
 /////////
 // UPDATE one user via /users/:id
 // UPDATE one product via /products/:id
@@ -84,7 +87,7 @@ describe('HANDLER INTEGRATION TESTS', () => {
         .set('Content-Type', 'application/json')
         .send({
           user_id: 1,
-          status: true
+          status: 'active'
         });
       expect(result.status).toBe(200);
     });
@@ -94,6 +97,20 @@ describe('HANDLER INTEGRATION TESTS', () => {
         product_id: 1,
         quantity: 5
       });
+      expect(result.status).toBe(200);
+    });
+  });
+
+  // AUTHENTICATE INTEGRATION TEST
+  describe('AUTHENTICATE HANDLER TEST', () => {
+    it('Should authenticate user', async () => {
+      const result = await request
+        .post('/users/authenticate')
+        .set('Content-Type', 'application/json')
+        .send({
+          id: 1,
+          password: 'MyPassword123'
+        });
       expect(result.status).toBe(200);
     });
   });
@@ -125,7 +142,7 @@ describe('HANDLER INTEGRATION TESTS', () => {
       expect(result.body[0]).toEqual({
         id: 1,
         user_id: 1,
-        status: true
+        status: 'active'
       });
     });
     it('Should get all order details from order_info', async () => {
@@ -171,7 +188,17 @@ describe('HANDLER INTEGRATION TESTS', () => {
       expect(result.body).toEqual({
         id: 1,
         user_id: 1,
-        status: true
+        status: 'active'
+      });
+    });
+    it('Should get one order by user ID and status', async () => {
+      const result = await request
+        .get('/orders/1/active')
+        .set('Authorization', 'Bearer ' + token);
+      expect(result.body).toEqual({
+        id: 1,
+        user_id: 1,
+        status: 'active'
       });
     });
   });
@@ -206,7 +233,7 @@ describe('HANDLER INTEGRATION TESTS', () => {
         .set('Content-Type', 'application/json')
         .send({
           user_id: 1,
-          status: true
+          status: 'complete'
         });
       expect(result.status).toBe(200);
     });

@@ -17,14 +17,17 @@ const userStore = new UserStore();
 // CREATE Order
 // Add Order Details to OrderInfo Table
 /////////
+// AUTHENTICATE User
+/////////
 // INDEX all users
 // INDEX all products
 // INDEX all orders
 /////////
 // SHOW one user
-// SHOW one product by user id
+// SHOW one product by id
 // SHOW one product by category
-// SHOW one order
+// SHOW one order by user id
+// SHOW one order by user id and status
 /////////
 // UPDATE one user
 // UPDATE one product
@@ -63,10 +66,10 @@ describe('UNIT TEST ALL MODELS', () => {
     it('Should create a new order', async () => {
       const result = await orderStore.create({
         user_id: 2,
-        status: true
+        status: 'active'
       });
       expect(result.user_id).toEqual(2);
-      expect(result.status).toEqual(true);
+      expect(result.status).toEqual('active');
     });
     it('Should add order details to OrderInfo table', async () => {
       const result = await orderStore.addProduct({
@@ -77,6 +80,14 @@ describe('UNIT TEST ALL MODELS', () => {
       expect(result.quantity).toEqual(50);
       expect(result.order_id).toEqual(2);
       expect(result.product_id).toEqual(2);
+    });
+  });
+
+  // AUTHENTICATE method test
+  describe('AUTHENTICATE', () => {
+    it('Should authenticate the user', async () => {
+      const result = await userStore.authenticateUser('2', 'password123');
+      expect(result).toBeTruthy;
     });
   });
 
@@ -119,8 +130,12 @@ describe('UNIT TEST ALL MODELS', () => {
     });
     it('Should return the created order by user ID', async () => {
       const result = await orderStore.showOrder('2');
-      expect(result.status).toEqual(true);
+      expect(result.status).toEqual('active');
       expect(result.user_id).toEqual(2);
+    });
+    it('Should return the created order by user ID and status and expect to fail', async () => {
+      const result = await orderStore.showOrderStatus('2', 'complete');
+      expect(result).toThrowError;
     });
   });
 
@@ -153,12 +168,12 @@ describe('UNIT TEST ALL MODELS', () => {
     it('Should update the order', async () => {
       const result = await orderStore.update(
         {
-          status: false, // Change status
+          status: 'complete', // Change status
           user_id: 2
         },
         '2' // order id
       );
-      expect(result.status).toEqual(false);
+      expect(result.status).toEqual('complete');
       expect(result.user_id).toEqual(2);
     });
   });

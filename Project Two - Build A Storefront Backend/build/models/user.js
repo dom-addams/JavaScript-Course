@@ -40,8 +40,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserStore = void 0;
-// Import the connection pool from the database.ts file
-var database_1 = __importDefault(require("../database"));
+var database_1 = __importDefault(require("../database")); // Import the connection pool from the database.ts file
+var bcrypt_1 = __importDefault(require("bcrypt")); // Import bcrypt to hash the password
 // Export UserStore class
 var UserStore = /** @class */ (function () {
     function UserStore() {
@@ -96,32 +96,65 @@ var UserStore = /** @class */ (function () {
             });
         });
     };
-    // Create new user
-    UserStore.prototype.create = function (u) {
+    // Authenticate user by id with bcrypt
+    // Use bycrypt to check results of password with bcypt secret and return boolean
+    UserStore.prototype.authenticateUser = function (id, password) {
         return __awaiter(this, void 0, void 0, function () {
             var conn, sql, result, user, err_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 3, , 4]);
+                        _a.trys.push([0, 5, , 6]);
+                        return [4 /*yield*/, database_1.default.connect()];
+                    case 1:
+                        conn = _a.sent();
+                        sql = 'SELECT * FROM users WHERE id=($1)';
+                        return [4 /*yield*/, conn.query(sql, [id])];
+                    case 2:
+                        result = _a.sent();
+                        conn.release();
+                        if (!result.rows.length) return [3 /*break*/, 4];
+                        user = result.rows[0];
+                        return [4 /*yield*/, bcrypt_1.default.compare(password + process.env.BCRYPT_PASSWORD, user.password)];
+                    case 3:
+                        if (_a.sent()) {
+                            return [2 /*return*/, true];
+                        }
+                        _a.label = 4;
+                    case 4: return [2 /*return*/, false];
+                    case 5:
+                        err_3 = _a.sent();
+                        throw new Error("Could not find user ".concat(id, ". Error: ").concat(err_3));
+                    case 6: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    // Create new user and hash user details with bcrypt and salt rounds
+    UserStore.prototype.create = function (u) {
+        return __awaiter(this, void 0, void 0, function () {
+            var conn, sql, hash, result, user, err_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 4, , 5]);
                         return [4 /*yield*/, database_1.default.connect()];
                     case 1:
                         conn = _a.sent();
                         sql = 'INSERT INTO users (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *';
-                        return [4 /*yield*/, conn.query(sql, [
-                                u.first_name,
-                                u.last_name,
-                                u.password
-                            ])];
+                        return [4 /*yield*/, bcrypt_1.default.hash(u.password + process.env.BCRYPT_PASSWORD, Number(process.env.SALT_ROUNDS))];
                     case 2:
+                        hash = _a.sent();
+                        return [4 /*yield*/, conn.query(sql, [u.first_name, u.last_name, hash])];
+                    case 3:
                         result = _a.sent();
                         user = result.rows[0];
                         conn.release();
                         return [2 /*return*/, user];
-                    case 3:
-                        err_3 = _a.sent();
-                        throw new Error("Could not add new user ".concat(u.first_name, ". Error: ").concat(err_3));
-                    case 4: return [2 /*return*/];
+                    case 4:
+                        err_4 = _a.sent();
+                        throw new Error("Could not add new user ".concat(u.first_name, ". Error: ").concat(err_4));
+                    case 5: return [2 /*return*/];
                 }
             });
         });
@@ -129,7 +162,7 @@ var UserStore = /** @class */ (function () {
     // Update user
     UserStore.prototype.update = function (u, id) {
         return __awaiter(this, void 0, void 0, function () {
-            var conn, sql, result, user, err_4;
+            var conn, sql, result, user, err_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -150,8 +183,8 @@ var UserStore = /** @class */ (function () {
                         conn.release();
                         return [2 /*return*/, user];
                     case 3:
-                        err_4 = _a.sent();
-                        throw new Error("Could not update user ".concat(id, ". Error: ").concat(err_4));
+                        err_5 = _a.sent();
+                        throw new Error("Could not update user ".concat(id, ". Error: ").concat(err_5));
                     case 4: return [2 /*return*/];
                 }
             });
@@ -160,7 +193,7 @@ var UserStore = /** @class */ (function () {
     // Delete user
     UserStore.prototype.delete = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var conn, sql, result, err_5;
+            var conn, sql, result, err_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -175,8 +208,8 @@ var UserStore = /** @class */ (function () {
                         conn.release();
                         return [2 /*return*/, result.rows[0]];
                     case 3:
-                        err_5 = _a.sent();
-                        throw new Error("Could not delete user ".concat(id, ". Error: ").concat(err_5));
+                        err_6 = _a.sent();
+                        throw new Error("Could not delete user ".concat(id, ". Error: ").concat(err_6));
                     case 4: return [2 /*return*/];
                 }
             });

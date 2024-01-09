@@ -35,16 +35,21 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var user_1 = require("../models/user"); // import user models
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // import jsonwebtoken
+var authenticate_1 = require("../utility/authenticate"); // import verifyAuthToken middleware
 var store = new user_1.UserStore(); // create new user store
 ////////////////////
 // USER HANDLERS //
 ////////////////////
 // Index Users
 // showUser
+// Authenticate User (pseudo login)
 // Create User
-// Authenticate User -- TO BE COMPLETED
 // Update User
 // Delete User
 // Get all users
@@ -90,9 +95,32 @@ var showUser = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
         }
     });
 }); };
+// Authenticate user by id and pass with bcrypt
+var authenticateUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, password, authenticated, err_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                id = req.body.id;
+                password = req.body.password;
+                return [4 /*yield*/, store.authenticateUser(id, password)];
+            case 1:
+                authenticated = _a.sent();
+                authenticated ? res.sendStatus(200) : res.sendStatus(401); // Check bool and send response
+                return [3 /*break*/, 3];
+            case 2:
+                err_3 = _a.sent();
+                res.status(400);
+                res.json(err_3);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
 // Create a new user in users table
 var createUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, newUser, err_3;
+    var user, newUser, token, err_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -105,12 +133,13 @@ var createUser = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, store.create(user)];
             case 1:
                 newUser = _a.sent();
-                res.json(newUser); // send response
+                token = jsonwebtoken_1.default.sign({ user: newUser }, process.env.TOKEN_SECRET);
+                res.json(token); // send response
                 return [3 /*break*/, 3];
             case 2:
-                err_3 = _a.sent();
+                err_4 = _a.sent();
                 res.status(400);
-                res.json(err_3);
+                res.json(err_4);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -118,7 +147,7 @@ var createUser = function (req, res) { return __awaiter(void 0, void 0, void 0, 
 }); };
 // Update user
 var updateUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, user, updatedUser, err_4;
+    var id, user, updatedUser, err_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -135,9 +164,9 @@ var updateUser = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 res.json(updatedUser); // send response
                 return [3 /*break*/, 3];
             case 2:
-                err_4 = _a.sent();
+                err_5 = _a.sent();
                 res.status(400);
-                res.json(err_4);
+                res.json(err_5);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -145,7 +174,7 @@ var updateUser = function (req, res) { return __awaiter(void 0, void 0, void 0, 
 }); };
 // Delete user
 var removeUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, deletedUser, err_5;
+    var id, deletedUser, err_6;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -157,9 +186,9 @@ var removeUser = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 res.json(deletedUser); // send response
                 return [3 /*break*/, 3];
             case 2:
-                err_5 = _a.sent();
+                err_6 = _a.sent();
                 res.status(400);
-                res.json(err_5);
+                res.json(err_6);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -170,9 +199,10 @@ var removeUser = function (req, res) { return __awaiter(void 0, void 0, void 0, 
 /////////////////////////////
 // Configure routes for users with express
 var user_routes = function (app) {
-    app.get('/users', indexUser); // get all users
-    app.get('/users/:id', showUser); // get user by user id
-    app.post('/users', createUser); // create new user
+    app.get('/users', authenticate_1.verifyAuthToken, indexUser); // get all users
+    app.get('/users/:id', authenticate_1.verifyAuthToken, showUser); // get user by user id
+    app.post('/users', authenticate_1.verifyAuthToken, createUser); // create new user
+    app.post('/users/authenticate', authenticateUser); // authenticate user
     app.put('/users/:id', updateUser); // update user
     app.delete('/users/:id', removeUser); // delete user
 };

@@ -37,12 +37,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var order_1 = require("../models/order"); // import order models
+var authenticate_1 = require("../utility/authenticate"); // import verifyAuthToken
 var store = new order_1.OrderStore(); // create new order store
 ////////////////////
 // ORDER HANDLERS //
 ////////////////////
 // Index Orders
 // showOrder
+// showOrderStatus
 // Create Order
 // Update Order
 // Delete Order
@@ -67,15 +69,15 @@ var indexOrder = function (_req, res) { return __awaiter(void 0, void 0, void 0,
         }
     });
 }); };
-// Get order by order id
+// Get order by user id
 var showOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, order, err_2;
+    var user_id, order, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                id = req.params.id;
-                return [4 /*yield*/, store.showOrder(id)];
+                user_id = req.params.id;
+                return [4 /*yield*/, store.showOrder(user_id)];
             case 1:
                 order = _a.sent();
                 res.json(order); // send response
@@ -89,9 +91,33 @@ var showOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, f
         }
     });
 }); };
+// Get order by user id and status
+var showOrderStatus = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user_id, status_1, order, err_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                user_id = req.params.id;
+                status_1 = req.params.status;
+                return [4 /*yield*/, store.showOrderStatus(user_id, status_1)];
+            case 1:
+                order = _a.sent();
+                res.json(order); // send response
+                return [3 /*break*/, 3];
+            case 2:
+                err_3 = _a.sent();
+                console.error(err_3); // Log the error
+                res.status(400);
+                res.json(err_3);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
 // Create a new order in orders table
 var createOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var order, newOrder, err_3;
+    var order, newOrder, err_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -106,9 +132,9 @@ var createOrder = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 res.json(newOrder); // send response
                 return [3 /*break*/, 3];
             case 2:
-                err_3 = _a.sent();
+                err_4 = _a.sent();
                 res.status(400);
-                res.json(err_3);
+                res.json(err_4);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -116,7 +142,7 @@ var createOrder = function (req, res) { return __awaiter(void 0, void 0, void 0,
 }); };
 // Update an order
 var updateOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, order, updatedOrder, err_4;
+    var id, order, updatedOrder, err_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -132,16 +158,16 @@ var updateOrder = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 res.json(updatedOrder); // send response
                 return [3 /*break*/, 3];
             case 2:
-                err_4 = _a.sent();
+                err_5 = _a.sent();
                 res.status(400);
-                res.json(err_4);
+                res.json(err_5);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
 }); };
 var removeOrder = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, deletedOrder, err_5;
+    var id, deletedOrder, err_6;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -154,9 +180,9 @@ var removeOrder = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 res.json(deletedOrder); // send response
                 return [3 /*break*/, 3];
             case 2:
-                err_5 = _a.sent();
+                err_6 = _a.sent();
                 res.status(400);
-                res.json(err_5);
+                res.json(err_6);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -170,7 +196,7 @@ var removeOrder = function (req, res) { return __awaiter(void 0, void 0, void 0,
 // Delete from OrderInfo
 // Add product to OrderInfo
 var addProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var oi, orderDetails, err_6;
+    var oi, orderDetails, err_7;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -187,9 +213,9 @@ var addProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 res.json(orderDetails); // send response
                 return [3 /*break*/, 3];
             case 2:
-                err_6 = _a.sent();
+                err_7 = _a.sent();
                 res.status(400);
-                res.json(err_6);
+                res.json(err_7);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -197,7 +223,7 @@ var addProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, 
 }); };
 // Get all from OrderInfo
 var indexOrderInfo = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var orderDetails, err_7;
+    var orderDetails, err_8;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -205,14 +231,14 @@ var indexOrderInfo = function (_req, res) { return __awaiter(void 0, void 0, voi
                 return [4 /*yield*/, store.indexOrderInfo()];
             case 1:
                 orderDetails = _a.sent();
-                console.log(orderDetails);
+                res.status(200);
                 res.send(orderDetails); // send response
                 return [3 /*break*/, 3];
             case 2:
-                err_7 = _a.sent();
-                console.error(err_7); // Log the error
+                err_8 = _a.sent();
+                console.error(err_8); // Log the error
                 res.status(400);
-                res.json(err_7); // Send the error message in the response
+                res.json(err_8); // Send the error message in the response
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -220,7 +246,7 @@ var indexOrderInfo = function (_req, res) { return __awaiter(void 0, void 0, voi
 }); };
 // Delete an order from OrderInfo
 var deleteOrderInfo = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, deletedOrder, err_8;
+    var id, deletedOrder, err_9;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -233,9 +259,9 @@ var deleteOrderInfo = function (req, res) { return __awaiter(void 0, void 0, voi
                 res.json(deletedOrder); // send response
                 return [3 /*break*/, 3];
             case 2:
-                err_8 = _a.sent();
+                err_9 = _a.sent();
                 res.status(400);
-                res.json(err_8);
+                res.json(err_9);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -247,14 +273,13 @@ var deleteOrderInfo = function (req, res) { return __awaiter(void 0, void 0, voi
 // Configure routes for orders with express
 var order_routes = function (app) {
     app.get('/orders', indexOrder); // get all orders
-    app.get('/orders/:id', showOrder); // get order by order id
+    app.get('/orders/details', indexOrderInfo); // get all order details
     app.post('/orders', createOrder); // create a new order
+    app.get('/orders/:id', authenticate_1.verifyAuthToken, showOrder); // get order by order id
+    app.get('/orders/:id/:status', authenticate_1.verifyAuthToken, showOrderStatus); // get order by user id and status
     app.put('/orders/:id', updateOrder); // update an order
     app.delete('/orders/:id', removeOrder); // delete an order
-    // OrderInfo routes
     app.post('/orders/:id/products', addProduct); // add product to order
-    // app.get('/orders/products', indexOrderInfo); // get all order details
-    app.get('/orderDetails', indexOrderInfo);
     app.delete('/orders/:id/products', deleteOrderInfo); // delete an order from order details
 };
 // export order routes

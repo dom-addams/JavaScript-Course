@@ -17,7 +17,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ### Orders
 - Current Order by user (args: user id)[token required]
-- [OPTIONAL] Completed Orders by user (args: user id)[token required]
+- Completed Orders by user (args: user id)[token required]
 
 ## API Endpoints -- ACTUAL
 ### Products
@@ -30,21 +30,25 @@ These are the notes from a meeting with the frontend developer that describe wha
 ### Users
 * `GET` `/users` == Get all users
 * `GET` `/users/:id` == Get user by ID
-* `POST` `/users/new` == Create new user ++ generate JWT
-* `POST` `/users/auth` == Authenticate user ???
-* `PUT` `/users/update/:id` == Update user with ID
+* `POST` `/users` == Create new user ++ generate JWT
+* `POST` `/users/authenticate` == Authenticate user
+* `PUT` `/users/:id` == Update user with ID
 * `DELETE` `/users/:id` == Delete user with ID
 
 ### Orders
 * `GET` `/orders` == Get all orders
-* `GET` `/orders/:id` == Get order with ID
+* `GET` `/orders/:id` == Get order with User ID
+* `GET` `/order/:id/:status` == Get order with User ID and Status
+* `GET` `/order/details` == Get order info
 * `POST` `/order` == Create new order
-* `PUT` `/order` == Update order to add stuff
+* `POST` `/orders/:id/products` == Add product to order
+* `PUT` `/order/:id` == Update order with ID
 * `DELETE` `/order/:id` == Delete order with ID
+* `DELETE` `/orders/:id/products` == Delete products from order
 
 ## Data Shapes
 ### Product
--  id
+- id
 - name
 - price
 - category
@@ -78,7 +82,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 ### Orders
 * ID `:Number`
 * User_ID [Foreign Key] `:Number`
-* Status `Boolean`
+* Status `String`
 
 ### Order_Info
 * ID `:Number`

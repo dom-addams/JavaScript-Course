@@ -2,7 +2,7 @@
 import db_pool from '../database';
 
 // Export Order Type and Use ? for the id to be optional
-export type Order = { id?: number; status: boolean; user_id: number };
+export type Order = { id?: number; status: string; user_id: number };
 
 // Export OrderInfo Type and use ? for the id to be optional
 export type OrderInfo = {
@@ -28,11 +28,36 @@ export class OrderStore {
   }
 
   // Get order by user id
-  async showOrder(uID: string): Promise<Order> {
+  async showOrder(id: string): Promise<Order> {
     try {
       const conn = await db_pool.connect();
       const sql = 'SELECT * FROM orders WHERE user_id=($1)';
-      const result = await conn.query(sql, [uID]);
+      const result = await conn.query(sql, [id]);
+      conn.release();
+      return result.rows[0];
+    } catch (err) {
+      throw new Error(`Could not find order for user. Error: ${err}`);
+    }
+  }
+
+  // Get order by user id and status
+  async showOrderStatus(id: string, status: string): Promise<Order> {
+    try {
+      const conn = await db_pool.connect();
+      // Try-Catch block to check status string equals active or complete
+      try {
+        if (status !== 'active' && status !== 'complete') {
+          throw new Error(
+            `Invalid Status ${status}. Status must be active or complete`
+          );
+        }
+      } catch (err) {
+        throw new Error(
+          `Could not show order by for user: ${id} with status: ${status}. ${err}`
+        );
+      }
+      const sql = 'SELECT * FROM orders WHERE user_id=($1) AND status=($2)';
+      const result = await conn.query(sql, [id, status]);
       conn.release();
       return result.rows[0];
     } catch (err) {
@@ -43,9 +68,19 @@ export class OrderStore {
   // Create a new order
   async create(o: Order): Promise<Order> {
     try {
+      const conn = await db_pool.connect();
+      // Try-Catch block to check status string equals active or complete
+      try {
+        if (o.status !== 'active' && o.status !== 'complete') {
+          throw new Error(
+            `Invalid Status ${o.status}. Status must be active or complete`
+          );
+        }
+      } catch (err) {
+        throw new Error(`Could not create new order. ${err}`);
+      }
       const sql =
         'INSERT INTO orders (user_id, status) VALUES($1, $2) RETURNING *';
-      const conn = await db_pool.connect();
       const result = await conn.query(sql, [o.user_id, o.status]);
       const order = result.rows[0];
       conn.release();

@@ -42,7 +42,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var supertest_1 = __importDefault(require("supertest")); // import supertest to test HTTP requests/responses
 var server_1 = __importDefault(require("../server")); // import express app
 var request = (0, supertest_1.default)(server_1.default); // supertest agent
-// AUTH, JWT TO BE COMPLETED
+// AUTH TOKEN FOR TESTING
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken")); // import jsonwebtoken
+var token = ''; // declare token variable
+// Create a User and Token for testing beforeAll tests
+beforeAll(function () { return __awaiter(void 0, void 0, void 0, function () {
+    var user, tmp_jwt;
+    return __generator(this, function (_a) {
+        user = {
+            first_name: 'Mark',
+            last_name: 'Cavendish',
+            password: 'EliteCyclist123'
+        };
+        tmp_jwt = jsonwebtoken_1.default.sign({ user: user }, process.env.TOKEN_SECRET);
+        token = tmp_jwt; // assign tmp token to variable
+        console.log('Token: ', token); // log token to console
+        return [2 /*return*/];
+    });
+}); });
+// Make token available to required tests
+exports.default = token;
 ///////////////////////////////
 // HANDLER INTEGRATION TESTS //
 ///////////////////////////////
@@ -51,6 +70,8 @@ var request = (0, supertest_1.default)(server_1.default); // supertest agent
 // CREATE Product via /products
 // CREATE Order via /orders
 // Add Order Details to OrderInfo Table via /orders/:id/products
+/////////
+// AUTHENTICATE User via /users/authenticate
 /////////
 // INDEX all users via /users
 // INDEX all products via /products
@@ -61,6 +82,7 @@ var request = (0, supertest_1.default)(server_1.default); // supertest agent
 // SHOW one product by id via /products/:id
 // SHOW one product by category via /products/category/:category
 // SHOW one order via /orders/:id
+// SHOW one order by user id and status via /orders/:id/:status
 /////////
 // UPDATE one user via /users/:id
 // UPDATE one product via /products/:id
@@ -78,11 +100,14 @@ describe('HANDLER INTEGRATION TESTS', function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, request.post('/users').send({
+                    case 0: return [4 /*yield*/, request
+                            .post('/users')
+                            .send({
                             first_name: 'Jane',
                             last_name: 'Ambers',
                             password: 'MyPassword123'
-                        })];
+                        })
+                            .set('Authorization', 'Bearer ' + token)];
                     case 1:
                         result = _a.sent();
                         expect(result.status).toBe(200);
@@ -94,11 +119,14 @@ describe('HANDLER INTEGRATION TESTS', function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, request.post('/products').send({
+                    case 0: return [4 /*yield*/, request
+                            .post('/products')
+                            .send({
                             name: 'Bananas',
                             price: 2.99,
                             category: 'Food'
-                        })];
+                        })
+                            .set('Authorization', 'Bearer ' + token)];
                     case 1:
                         result = _a.sent();
                         expect(result.status).toBe(200);
@@ -115,7 +143,7 @@ describe('HANDLER INTEGRATION TESTS', function () {
                             .set('Content-Type', 'application/json')
                             .send({
                             user_id: 1,
-                            status: true
+                            status: 'active'
                         })];
                     case 1:
                         result = _a.sent();
@@ -141,13 +169,36 @@ describe('HANDLER INTEGRATION TESTS', function () {
             });
         }); });
     });
+    // AUTHENTICATE INTEGRATION TEST
+    describe('AUTHENTICATE HANDLER TEST', function () {
+        it('Should authenticate user', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, request
+                            .post('/users/authenticate')
+                            .set('Content-Type', 'application/json')
+                            .send({
+                            id: 1,
+                            password: 'MyPassword123'
+                        })];
+                    case 1:
+                        result = _a.sent();
+                        expect(result.status).toBe(200);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+    });
     // INDEX INTEGRATION TESTS
     describe('INDEX HANDLER TESTS', function () {
         it('Should get all users', function () { return __awaiter(void 0, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, request.get('/users')];
+                    case 0: return [4 /*yield*/, request
+                            .get('/users')
+                            .set('Authorization', 'Bearer ' + token)];
                     case 1:
                         result = _a.sent();
                         expect(result.body.length).toBeGreaterThan(0);
@@ -187,7 +238,7 @@ describe('HANDLER INTEGRATION TESTS', function () {
                         expect(result.body[0]).toEqual({
                             id: 1,
                             user_id: 1,
-                            status: true
+                            status: 'active'
                         });
                         return [2 /*return*/];
                 }
@@ -198,31 +249,11 @@ describe('HANDLER INTEGRATION TESTS', function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, request
-                            .get('/orders/products')
+                            // .get('/orderDetails')
+                            .get('/orders/details')
                             .set('Content-type', 'application/json')];
                     case 1:
                         result = _a.sent();
-                        expect(result.body[0]).toEqual({
-                            id: 1,
-                            order_id: 1,
-                            product_id: 1,
-                            quantity: 5
-                        });
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        it('Should get all order details from order_info', function () { return __awaiter(void 0, void 0, void 0, function () {
-            var result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, request
-                            .get('/orderDetails')
-                            .set('Content-type', 'application/json')];
-                    case 1:
-                        result = _a.sent();
-                        console.log('Status:', result.status);
-                        console.log('Body:', result.body);
                         expect(result.body[0]).toEqual({
                             id: 1,
                             order_id: 1,
@@ -240,7 +271,9 @@ describe('HANDLER INTEGRATION TESTS', function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, request.get('/users/1')];
+                    case 0: return [4 /*yield*/, request
+                            .get('/users/1')
+                            .set('Authorization', 'Bearer ' + token)];
                     case 1:
                         result = _a.sent();
                         expect(result.body.first_name).toEqual('Jane');
@@ -278,17 +311,37 @@ describe('HANDLER INTEGRATION TESTS', function () {
                 }
             });
         }); });
-        it('Should get one order', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('Should get one order by user ID', function () { return __awaiter(void 0, void 0, void 0, function () {
             var result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, request.get('/orders/1')];
+                    case 0: return [4 /*yield*/, request
+                            .get('/orders/1')
+                            .set('Authorization', 'Bearer ' + token)];
                     case 1:
                         result = _a.sent();
                         expect(result.body).toEqual({
                             id: 1,
                             user_id: 1,
-                            status: true
+                            status: 'active'
+                        });
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        it('Should get one order by user ID and status', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, request
+                            .get('/orders/1/active')
+                            .set('Authorization', 'Bearer ' + token)];
+                    case 1:
+                        result = _a.sent();
+                        expect(result.body).toEqual({
+                            id: 1,
+                            user_id: 1,
+                            status: 'active'
                         });
                         return [2 /*return*/];
                 }
@@ -344,7 +397,7 @@ describe('HANDLER INTEGRATION TESTS', function () {
                             .set('Content-Type', 'application/json')
                             .send({
                             user_id: 1,
-                            status: true
+                            status: 'complete'
                         })];
                     case 1:
                         result = _a.sent();

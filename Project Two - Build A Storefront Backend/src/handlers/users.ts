@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express'; // import express
 import { User, UserStore } from '../models/user'; // import user models
 import jwt from 'jsonwebtoken'; // import jsonwebtoken
-import { verifyAuthToken } from '../utility/authenticate';
+import { verifyAuthToken } from '../utility/authenticate'; // import verifyAuthToken middleware
 
 const store = new UserStore(); // create new user store
 
@@ -10,8 +10,8 @@ const store = new UserStore(); // create new user store
 ////////////////////
 // Index Users
 // showUser
+// Authenticate User (pseudo login)
 // Create User
-// Authenticate User (pseudo login) -- TO BE COMPLETED
 // Update User
 // Delete User
 
@@ -32,6 +32,19 @@ const showUser = async (req: Request, res: Response) => {
     const id = req.params.id; // get user id
     const user = await store.showUser(id); // get user by user id
     res.json(user); // send response
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
+};
+
+// Authenticate user by id and pass with bcrypt
+const authenticateUser = async (req: Request, res: Response) => {
+  try {
+    const id = req.body.id; // get user id
+    const password = req.body.password; // get user password
+    const authenticated = await store.authenticateUser(id, password); // authenticate user
+    authenticated ? res.sendStatus(200) : res.sendStatus(401); // Check bool and send response
   } catch (err) {
     res.status(400);
     res.json(err);
@@ -96,6 +109,7 @@ const user_routes = (app: express.Application) => {
   app.get('/users', verifyAuthToken, indexUser); // get all users
   app.get('/users/:id', verifyAuthToken, showUser); // get user by user id
   app.post('/users', verifyAuthToken, createUser); // create new user
+  app.post('/users/authenticate', authenticateUser); // authenticate user
   app.put('/users/:id', updateUser); // update user
   app.delete('/users/:id', removeUser); // delete user
 };
