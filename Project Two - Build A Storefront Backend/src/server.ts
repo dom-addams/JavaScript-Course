@@ -9,10 +9,11 @@ const app: express.Application = express();
 const address = '0.0.0.0:3000';
 
 const corsOptions = {
-  origin: '*',
+  origin: 'http://localhost/', // List of origins to allow, currently only localhost
   optionsSuccessStatus: 200
 };
 
+app.use(cors(corsOptions)); // Use CORS to allow origins
 app.use(bodyParser.json());
 
 app.get('/', function (req: Request, res: Response) {
