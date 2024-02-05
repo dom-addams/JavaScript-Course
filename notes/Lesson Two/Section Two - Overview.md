@@ -1,4 +1,4 @@
-# Notes for 
+# Notes for Secion Two
 
 ## Course Outline
 * Databases and SQL

@@ -4,7 +4,9 @@
     "description": "TypeScript project",
     "main": "index.ts",
     "scripts": {
-        "start": "nodemon src/index.ts",
+        "start": "SERVER_PORT=80 nodemon src/index.ts",
+        "dev": "SERVER_ENV=development nodemon src/index.ts",
+        "prod": "SERVER_ENV=production nodemon src/index.ts",
         "build": "npx tsc"
     },
     "author": "Udacity",
