@@ -22,7 +22,7 @@ import dotenv from "dotenv";
 // Configure dotenv
 dotenv.config();
 
-const { SERVER_ENV, SERVER_PORT } = process.env;
+const { ENV, SERVER_PORT } = process.env;
 
 // setup express app
 const app = express();
@@ -34,21 +34,10 @@ app.get("/api", (req, res) => {
 });
 
 // If Else statement checking ENVIRONMENT and setting up Express of HTTPS server
-if (SERVER_ENV === "production") {
-  const keyFile = fs.readFileSync("./certs/key.pem");
-  const certFile = fs.readFileSync("./certs/cert.pem");
-  console.log(SERVER_ENV)
-
-  // Create HTTPS server with certs
-  https
-    .createServer({ key: `${keyFile}`, cert: `${certFile}` }, app)
-    .listen(port, () => {
-      console.log(`server started with HTTPS at https://localhost:${port}`);
-    });
-} else if (SERVER_ENV === "development") {
-  const keyFile = fs.readFileSync("./certs/key.pem");
-  const certFile = fs.readFileSync("./certs/cert.pem");
-  console.log(SERVER_ENV)
+if (ENV === "server") {
+  const keyFile = fs.readFileSync("/etc/ssl/certs/ca-cert-key.key.pem");
+  const certFile = fs.readFileSync("/etc/ssl/certs/ca-cert-cert.pem");
+  console.log(ENV)
 
   // Create HTTPS server with certs
   https

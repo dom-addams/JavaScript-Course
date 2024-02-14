@@ -22,7 +22,7 @@ var fs_1 = __importDefault(require("fs"));
 var dotenv_1 = __importDefault(require("dotenv"));
 // Configure dotenv
 dotenv_1.default.config();
-var _a = process.env, SERVER_ENV = _a.SERVER_ENV, SERVER_PORT = _a.SERVER_PORT;
+var _a = process.env, ENV = _a.ENV, SERVER_PORT = _a.SERVER_PORT;
 // setup express app
 var app = (0, express_1.default)();
 var port = SERVER_PORT;
@@ -31,21 +31,10 @@ app.get("/api", function (req, res) {
     res.send("Hello, World");
 });
 // If Else statement checking ENVIRONMENT and setting up Express of HTTPS server
-if (SERVER_ENV === "production") {
-    var keyFile = fs_1.default.readFileSync("./certs/key.pem");
-    var certFile = fs_1.default.readFileSync("./certs/cert.pem");
-    console.log(SERVER_ENV);
-    // Create HTTPS server with certs
-    https_1.default
-        .createServer({ key: "".concat(keyFile), cert: "".concat(certFile) }, app)
-        .listen(port, function () {
-        console.log("server started with HTTPS at https://localhost:".concat(port));
-    });
-}
-else if (SERVER_ENV === "development") {
-    var keyFile = fs_1.default.readFileSync("./certs/key.pem");
-    var certFile = fs_1.default.readFileSync("./certs/cert.pem");
-    console.log(SERVER_ENV);
+if (ENV === "server") {
+    var keyFile = fs_1.default.readFileSync("/etc/ssl/certs/ca-cert-key.key.pem");
+    var certFile = fs_1.default.readFileSync("/etc/ssl/certs/ca-cert-cert.pem");
+    console.log(ENV);
     // Create HTTPS server with certs
     https_1.default
         .createServer({ key: "".concat(keyFile), cert: "".concat(certFile) }, app)

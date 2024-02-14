@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-photos',
-  standalone: true,
-  imports: [],
   templateUrl: './photos.component.html',
-  styleUrl: './photos.component.css'
+  styleUrls: ['./photos.component.css'],
 })
-export class PhotosComponent {
+export class PhotosComponent implements OnInit {
+  @Input() photographerName: string = '';
 
+  constructor() {}
+
+  ngOnInit(): void {}
 }
