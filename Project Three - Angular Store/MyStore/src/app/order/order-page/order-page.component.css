@@ -1,0 +1,19 @@
+.order-wrapper {
+  display: flex;
+  justify-content: center;
+}
+.confirmation {
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8%;
+}
+
+a {
+  color: #33b5e5;
+}
+
+a:hover {
+  color: #33b5e5;
+  text-decoration: underline;
+}

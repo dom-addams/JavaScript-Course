@@ -1,0 +1,30 @@
+img {
+  border-radius: 10px;
+  width: 320px;
+}
+
+.select-quantity {
+  width: 108px;
+  margin-bottom: 8px;
+}
+
+.product-detail-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 64px;
+}
+
+.product-detail {
+  margin-left: 64px;
+  margin-right: 64px;
+}
+
+.detail-item {
+  margin-left: 128px;
+  margin-right: 128px;
+}
+
+.back-link {
+  margin-top: 8px;
+}

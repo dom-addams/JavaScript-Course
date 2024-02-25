@@ -1,0 +1,12 @@
+.product-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  max-width: 1024px;
+  margin-bottom: 64px;
+}
