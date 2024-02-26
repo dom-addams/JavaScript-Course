@@ -1,7 +1,8 @@
-import { CartService } from '../../services/cart.service';
-import Product from '../../models/productClass';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DecimalPipe } from '@angular/common';
+import Product from '../../models/productClass';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-cart-page',
@@ -17,7 +18,7 @@ export class CartPageComponent implements OnInit {
   // Checkout form elements
   fullname: string = '';
   address: string = '';
-  creditcard: number;
+  creditcard: Number = 0;
 
   // Cart total as CartService.cartTotal() method
   cartTotal: string = this.cartService.cartTotal();
@@ -35,10 +36,11 @@ export class CartPageComponent implements OnInit {
   checkoutOrder() {
     console.log(`this.fullname`);
     console.log(this.fullname);
+    console.log(this.creditcard);
     this.cartService.populateOrder(this.fullname, this.address);
     this.fullname = '';
     this.address = '';
-    this.creditcard;
+    this.creditcard = 0;
     this.cartItems = []; // Clears the cart
     this.cartService.clearCart();
     this.cartTotal = '';

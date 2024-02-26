@@ -1,7 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import Product from '../../models/productClass';
-import { CartService } from '../../services/cart.service';
-import { HttpService } from '../../services/http.service';
 
 @Component({
   selector: 'app-products',
@@ -11,27 +9,26 @@ import { HttpService } from '../../services/http.service';
 
 // ProductsComponent class to create a list of products
 export class ProductsComponent implements OnInit {
-  // products array to store the list of products
-  products: Product[] = [];
+  // pass Input and Output to the component
+  @Input() product: Product
+  @Output() addProduct: EventEmitter<Product> = new EventEmitter
 
-  // constructor to inject the HttpService and CartService
-  constructor(
-    private httpService: HttpService,
-    private cartService: CartService
-  ) {}
+  // quantity of product
+  quantity: number = 1
 
-  // ngOnInit method to fetch the products from the server
+  constructor() { }
+
   ngOnInit(): void {
-    this.httpService.getProducts().subscribe((data) => {
-      this.products = data;
-    });
   }
 
-  // addToCart method to add the product to the cart
-  addToCart(product: Product) {
-    this.cartService.addToCart(product);
-    window.alert(
-      `${product.name} x ${product.quantity} have been added to your cart`
-    );
+  // add product to cart
+  addToCart(){
+    console.log(`this.quantity`)
+    console.log(this.quantity)
+    this.product.quantity = this.quantity
+    console.log(`this.product`)
+    console.log(this.product)
+    this.addProduct.emit(this.product)
+    this.quantity = 1
   }
 }
