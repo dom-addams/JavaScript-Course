@@ -24,7 +24,7 @@ Some useful commands are:
 * `ng test` to run unit tests
 * `ng serve` to serve your app and reload on changes
 * `ng build` to build the application
-* `ng hhelp` to see available commands and functions
+* `ng help` to see available commands and functions
 
 ### Components
 A component is a fundamental building lock of an Angular App.
