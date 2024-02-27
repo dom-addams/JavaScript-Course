@@ -1,10 +1,10 @@
 <div class="product-detail-container">
-  <form (ngSubmit)="addToCart()">
-    <img src="{{ product.url }}" alt="{{ product.name }}" />
-    <h3>{{ product.name }}</h3>
-    <br />
-    <span>${{ product.price }}</span
-    ><br />
+  <form (ngSubmit)="addToCart()" class="text-center">
+    <a class="product-link" routerLink="product/{{ product.id }}">
+      <img src="{{ product.url }}" alt="{{ product.name }}" class="product-homepage-image"/>
+    </a>
+    <h3 style="font-size: 24px;">{{ product.name }}</h3>
+    <span style="font-weight: bold;">${{ product.price }}</span><br />
     <select class="select-quantity" name="quantity" [(ngModel)]="quantity">
       <option value="1" selected>1</option>
       <option value="2">2</option>
@@ -15,10 +15,8 @@
       <option value="7">7</option>
       <option value="8">8</option>
       <option value="9">9</option>
-      <option value="10">10</option></select
-    ><br />
-    <a class="back-link" routerLink="product/{{ product.id }}">View Product</a
-    ><br />
-    <input type="submit" value="Add To Cart" /><br />
+      <option value="10">10</option>
+    </select><br />
+    <input type="submit" value="Add To Cart" class="add-to-cart-button"/>
   </form>
 </div>

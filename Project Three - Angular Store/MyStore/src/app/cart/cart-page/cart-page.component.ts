@@ -18,7 +18,7 @@ export class CartPageComponent implements OnInit {
   // Checkout form elements
   fullname: string = '';
   address: string = '';
-  creditcard: Number = 0;
+  creditcard: string = '';
 
   // Cart total as CartService.cartTotal() method
   cartTotal: string = this.cartService.cartTotal();
@@ -33,14 +33,14 @@ export class CartPageComponent implements OnInit {
   }
 
   // checkoutOrder method to checkout the order
-  checkoutOrder() {
+  checkoutOrder() {  
     console.log(`this.fullname`);
     console.log(this.fullname);
     console.log(this.creditcard);
     this.cartService.populateOrder(this.fullname, this.address);
     this.fullname = '';
     this.address = '';
-    this.creditcard = 0;
+    this.creditcard = '';
     this.cartItems = []; // Clears the cart
     this.cartService.clearCart();
     this.cartTotal = '';
@@ -55,16 +55,6 @@ export class CartPageComponent implements OnInit {
     console.log(`Index`);
     console.log(index);
     this.cartService.updateQuantity(+quant, index);
-    this.cartTotal = this.cartService.cartTotal();
-  }
-
-  // removeProduct method to remove a product from the cart
-  removeProduct(id: number) {
-    const newCart = this.cartItems.filter((item) => item.id !== id);
-    this.cartItems = newCart;
-    console.log(`deleteFromCart`);
-    console.log(this.cartItems);
-    this.cartService.deleteFromCart(id);
     this.cartTotal = this.cartService.cartTotal();
   }
 }

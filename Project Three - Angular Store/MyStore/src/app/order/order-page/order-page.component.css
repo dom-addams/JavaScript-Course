@@ -9,11 +9,33 @@
   margin-top: 8%;
 }
 
-a {
-  color: #33b5e5;
+.back-to-products {
+  background-color: #6411CD;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 15px;
+  margin-top: 10px;
+  cursor: pointer;
 }
 
-a:hover {
-  color: #33b5e5;
-  text-decoration: underline;
+.back-to-products:hover {
+  background-color: #4B0082;
+}
+
+
+.back-to-cart-button {
+  background-color: #6411CD;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 15px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.back-to-cart-button:hover {
+  background-color: #4B0082;
 }

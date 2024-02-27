@@ -5,17 +5,18 @@
       Thank you for your order.
     </h3>
     <h3>
-      Your <b>${{ +orderDetails.total }}</b> order is confirmed.
+      Your order for <b>${{ +orderDetails.total }}</b> is confirmed.
     </h3>
     <h3>Please allow up to 5 business days for shipping</h3>
-    <a routerLink="/" (click)="clearOrder()">Back to products page</a>
+    <button class="back-to-products" routerLink="/" (click)="clearOrder()">Back to products page</button>
   </div>
   <ng-template #showThis>
     <div class="confirmation">
       <h1>Oops!</h1>
       <h3>No Order Found</h3>
       <h3>Return to the checkout page to complete your order.</h3>
-      <a routerLink="/checkout">Back to checkout</a>
+      <button type="button" class="back-to-cart-button" routerLink="/checkout">Back to checkout</button>
+      <!-- <a routerLink="/checkout">Back to checkout</a> -->
     </div>
   </ng-template>
 </div>

@@ -7,11 +7,11 @@
     />
   </div>
   <div class="product-container">
-    <form (ngSubmit)="addToCart()">
-      <h3>{{ product?.name }}</h3>
-      <p>{{ product?.description }}</p>
-      <span>${{ product?.price }}</span
-      ><br />
+    <form (ngSubmit)="addToCart()" class="product-page-form">
+      <h3 style="font-size: 30px; margin-bottom: 5px;">{{ product?.name }}</h3>
+      <p style="font-weight: bold;">{{ product?.description }}</p>
+      <span style="font-weight: bold;">${{ product?.price }}</span
+      ><br><br />
       <select name="quantity" [(ngModel)]="quantity" class="select-input">
         <option value="1" selected>1</option>
         <option value="2">2</option>
@@ -24,8 +24,9 @@
         <option value="9">9</option>
         <option value="10">10</option></select
       ><br />
-      <input type="submit" value="Add To Cart" /><br />
-      <a routerLink="/">Return To Products</a><br />
+      <input type="submit" value="Add To Cart" class="product-page-add-to-cart-button"/>
+      <button type="button" class="view-cart-button" routerLink="/checkout">Go to Cart</button><br />
+      <button class="homepage-return-button" routerLink="/">Return To Homepage</button><br>
     </form>
   </div>
 </div>
