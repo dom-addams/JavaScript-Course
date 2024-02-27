@@ -1,73 +1,112 @@
-# MyStore Project Overview
+# *_Project Three - MyStore Angular App_*
+This project contains an angular application called MyStore.
 
-MyStore is Angular application that allows users to view a list of available products to purchase, add them to a shopping cart, and ultimately complete the checkout process. 
+## Overview
+All code for this project is inside the `MyStore` folder.
 
-## Getting Started
+The application leverages the Angular framework to create a storefront that contains Angular Components.
 
-To use these files, simply merge the folders into the root directory of your scaffolded Angular application.
+In addition to the `Components` feature, this app uses `Services` and `Angular Routing` for navigation.
 
-## Project Instructions
+HTML is used to "create" the website and CSS has been used to apply customm styling (including button hover).
 
-#### Project introduction: MyStore
+## Build & Serve
+To prepare the project, run `npm i`.
 
-You've completed the course! You know how to create a single-page application to offer a rich, dynamic experience on the web.
+To build and server the project, run `ng serve`.
 
-![MyStore shopping flow](shoppingflow.gif)
+This will serve the application on `http:localhost:4200`.
 
-To showcase your new skills, you'll build an e-commerce website – an application that allows users to view a list of available products to purchase, add them to a shopping cart, and ultimately complete the checkout process. 
+While navigating the application, the paths will will also show in the address bar i.e. `http:localhost:4200/checkout`.
 
-#### How will this help my career?
+## Unit Tests
+As unit testing is not a requirement for completion of this project, it has not been included.
 
-Many applications that you use daily include the functionality to read, write, update, and delete content provided by APIs. For example, a typical image-sharing social media application may allow you to view photos, add photos, edit them, and remove them from an album or user account. Similar to such applications, this project relies on input from users of the application. After completing this project, you'll solidify your skills in designing and creating interactive CRUD applications in the real world.
 
-#### Before you begin
+# *_Project Structure_*
 
-Throughout the course, you've learned a lot about Angular components, services, modules, services, routing, and data flow. Before you begin scaffolding the application, ask yourself:
+## Routing
 
-* How do I fetch and use data from an external API (or JSON data file)?
-* What does a logical hierarchy of components look like? For example, which components should be parent components, and which components should be their children components?
-* How do I collect input from the user, using controlled form elements as the "source of truth" of such data?
-* What are events in Angular, and how do I listen and respond to them?
-* What is a model, and how do I create one in TypeScript?
-* How do I pass data between parent and child components? Hint: Which decorators should be used?
-* How do I pass data between sibling or otherwise "unrelated" components?
-* How is routing set up in the templates? Likewise, how do I configure the app routing module to support this?
+### _Path:_ `/`
 
-#### Starter code
+Displays the homepage which shows all the products available from `data.json` file.
 
-The Angular CLI allows you to quickly scaffold a new application, as well as generate all necessary components, services, and modules. While you'll use the CLI to create a new application from scratch, we've provided some code and data to help you along the way:
+To view details of product, click on image.
 
-* **CSS**. The provided stylesheets are not required, but you may use the included CSS classes to help you style the application. Feel free to use your creativity and build a UI as you see fit!
+### _Path:_ `/product:id`
 
-* `data.json`. You may fetch the list of products for your store from the API created in the previous course of this Nanodegree program. In lieu of using that data, you may also choose to have your application read the provided `data.json` file to populate your store.
+Displays detailed product page about the specific item.
 
-If you choose to use the starter code, all files can be downloaded here. To use them, just merge the folders into the root directory of your scaffolded application.
+### _Path:_ `/checkout`
 
-#### Project features
+Takes the user to the checkout page.
 
-Your application reflects the same user experience as that of a real-world e-commerce website, including a(n):
+Will only display `Total` if baske isn't empty/
 
-* **Product list** page, which displays the available products for the user to choose and add to their cart (in various quantities)
-* **Product details** page, which displays more information about any particular product
-* **Shopping cart**, which includes the products that the user has added to their cart
-* **Checkout form**, which collects information about the user (e.g., name, address, payment details, etc.)
-* **Order confirmation page**, which shows the outcome after the user completes the checkout process (i.e., submits the checkout form)
+If cart is empty, display message "Your cart is empty"
 
-#### Development strategy
+> If cart or fields are empty, the Purchase button won't work
 
-Feel free to use this overview and the rubric specifications to create this project. You are always welcome to design and implement your own workflow, but if you are stuck or could use some inspiration, we've included the following walkthrough the help you get up and running.
+### _Path:_ `/order`
 
-1. **Scaffold your project** using the Angular CLI, and install any dependencies.
-2. **Generate the product list component**. Having the product list as the "main" page is a great start for your users.
-3. **Begin building the component logic and template** What is the function of the product list? What logic is included in the TypeScript component, and how does its HTML template function? Does this component collect any user input? If so, how does information entered by the user relate to properties in the TypeScript component?
-3. **Consider the hierarchy of components**. Which other components do you anticipate you'll need to build in this application? Which component(s) should render other components? Which components should represent a parent-child relationship? Feel free to draw out this hierarchy as a chart to help you visualize the relationships between components.
-4. **Create the TypeScript model** for products in the app. Any available product should be of this type, rather than an ordinary object.
-5. **Generate the service(s)**. Which service(s) make the most sense? For any particular service, what is its function? Hint: You may want to create a service to handle any asynchronous data.
-6. **Fetch data** from the API (or included `data.json` file) and render products in your product list.
-7. **Generate and create other components**. How do these components interact, if at all, with the component you first created? How can we facilitate sharing information between them?
-8. **Create routing** between components. Which components are linked by the router? How is the app routing module set up and configured to make sure the page doesn't reload during navigation?
-9. **Ensure that inputs are validated** in the client. For example, your checkout form needs to collect information from the user in order for them to complete the checkout process. How do you ensure that you are collecting accurate information from the user?
+Once a user completes their order, they will be taken to the successful order page.
 
-## License
+If no order exists, there's a return to checkout button.
 
-[License](LICENSE.txt)
+On successful order, there is a back to products page button.
+
+## Services
+
+### HTTP Service
+The HTTP service returns observables that can be subscribed to return data. 
+
+It simulates working with a REST API by fetching data from `data.json` in the `assets` folder. 
+
+### Cart Service
+The Cart interacts with most components and the service allows better handling of CRUD operations.
+
+It allows the app to store a "state" value of the cart. From adding items to returning cart total.
+
+This makes the cart more flexible than adding lots of `Input` and `Output` decorators to components.
+
+## Modules
+
+### Product Module
+This houses three different product components. 
+
+The components in this module are:
+
+ - `product-list`
+ - `product-page`
+ - `products`
+
+### Cart Module
+Contains the `cart-page` component displaying checkout page.
+
+### Order Module
+This contains the `order` component used for showing the successful order or no order page.
+
+## Components
+
+### Product Components
+ - `product-list`:
+ 	- Parent component for `products` component. 
+ 	- Pulls data using the HTTP service and subscribes to results.
+ 	- Results are then passed to products array to store the list of products.
+ 	- Renders each product in the list for `products` component.
+
+ - `products`: Renders the products from `data.json` on the products homepage
+ - `product-page`: This displays the item page for a specific product. This is the page shown when clicking on images.
+
+### Cart Components
+ - `cart-page`: 
+ 	- Displays the checkout page and handles the entire checkout process.
+ 	- Contains a form with fields to fill out to complete order.
+ 	- Shows products that have been "added" to cart.
+ 	- Only displays total and allows purchase completion when cart is not empty. 
+ 	- On submission of form, sneds user to order page.
+
+### Order Components
+When the user submits the form from the `cart-page` component, it returns a order successful page.
+
+Also shows a "no order found" page with a return button.

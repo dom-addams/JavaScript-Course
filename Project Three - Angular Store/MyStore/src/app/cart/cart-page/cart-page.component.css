@@ -96,3 +96,7 @@ img {
   margin-top: 10px;
   cursor: pointer;
 }
+
+.submit-details:hover {
+  background-color: #4B0082;
+}

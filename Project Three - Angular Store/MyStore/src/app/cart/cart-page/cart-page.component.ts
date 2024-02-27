@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DecimalPipe } from '@angular/common';
 import Product from '../../models/productClass';
 import { CartService } from '../../services/cart.service';
 
