@@ -1,16 +1,16 @@
 <div class="page-container">
   <div class="product-container">
     <img
-      src="{{ product?.url }}"
-      alt="{{ product?.name }}"
+      src="{{ product.url }}"
+      alt="{{ product.name }}"
       class="product-image"
     />
   </div>
   <div class="product-container">
     <form (ngSubmit)="addToCart()" class="product-page-form">
-      <h3 style="font-size: 30px; margin-bottom: 5px;">{{ product?.name }}</h3>
-      <p style="font-weight: bold;">{{ product?.description }}</p>
-      <span style="font-weight: bold;">${{ product?.price }}</span
+      <h3 style="font-size: 30px; margin-bottom: 5px;">{{ product.name }}</h3>
+      <p style="font-weight: bold;">{{ product.description }}</p>
+      <span style="font-weight: bold;">${{ product.price }}</span
       ><br><br />
       <select name="quantity" [(ngModel)]="quantity" class="select-input">
         <option value="1" selected>1</option>

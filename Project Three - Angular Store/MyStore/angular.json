@@ -68,10 +68,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "MyStore:build:production"
+              "buildTarget": "MyStore:build:production"
             },
             "development": {
-              "browserTarget": "MyStore:build:development"
+              "buildTarget": "MyStore:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -79,7 +79,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "MyStore:build"
+            "buildTarget": "MyStore:build"
           }
         },
         "test": {
@@ -101,6 +101,5 @@
         }
       }
     }
-  },
-  "defaultProject": "MyStore"
+  }
 }
