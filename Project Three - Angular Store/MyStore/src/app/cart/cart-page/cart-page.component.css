@@ -100,3 +100,18 @@ img {
 .submit-details:hover {
   background-color: #4B0082;
 }
+
+.remove-product {
+  background-color: #6411CD;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 15px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.remove-product:hover {
+  background-color: #4B0082;
+}

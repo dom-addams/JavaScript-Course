@@ -23,6 +23,8 @@
             (change)="updateQuantity(i, quant.value)"
           />
         </div>
+        <!-- button to call removeItem method to remove product from cart -->
+        <button (click)="removeItem(cart.id)" class="remove-product">Remove Product</button>
       </div>
     </div>
     <h2 *ngIf="cartItems.length > 0">
@@ -43,6 +45,7 @@
         maxlength="50"
         name="fullname"
         [(ngModel)]="fullname"
+        (ngModelChange)="validateName()"
         class="name-input"
       /><br />
       Address<br />
@@ -55,6 +58,7 @@
         maxlength="100"
         name="address"
         [(ngModel)]="address"
+        (ngModelChange)="validateAddress()"
         class="address-input"
       /><br />
       Credit Card<br />
@@ -62,12 +66,13 @@
         #creditcardval="ngModel"
         pattern="[0-9]*"
         type="text"
-        placeholder="(minimum 15 characters)"
+        placeholder="(minimum 16 characters)"
         required
         minlength="15"
         maxlength="16"
         name="creditcard"
         [(ngModel)]="creditcard"
+        (ngModelChange)="validateCreditCard()"
         class="card-input"
       /><br />
       <input
@@ -98,9 +103,9 @@
       </div>
       <div *ngIf="creditcardval.errors?.['pattern']">Numbers Only</div>
       <div *ngIf="creditcardval.errors?.['minlength']">
-        Credit Card number must be at least 15 characters long.
+        Credit Card number must be at least 16 characters long.
       </div>
-    </div>
+    </div><br />
     <!-- div for ngIf form.valid but cartitems <=0 -->
     <div *ngIf="form.invalid && cartItems.length <= 0" class="alert">
       <div>Your cart is empty.</div>

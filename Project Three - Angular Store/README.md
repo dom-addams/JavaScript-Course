@@ -89,24 +89,63 @@ This contains the `order` component used for showing the successful order or no 
 ## Components
 
 ### Product Components
- - `product-list`:
- 	- Parent component for `products` component. 
- 	- Pulls data using the HTTP service and subscribes to results.
- 	- Results are then passed to products array to store the list of products.
- 	- Renders each product in the list for `products` component.
+ - `product-list`
+	- Parent component for `products` component. 
+	- Pulls data using the HTTP service and subscribes to results.
+	- Results are then passed to products array to store the list of products.
+	- Renders each product in the list for `products` component.
 
  - `products`: Renders the products from `data.json` on the products homepage
  - `product-page`: This displays the item page for a specific product. This is the page shown when clicking on images.
 
 ### Cart Components
- - `cart-page`: 
- 	- Displays the checkout page and handles the entire checkout process.
- 	- Contains a form with fields to fill out to complete order.
- 	- Shows products that have been "added" to cart.
- 	- Only displays total and allows purchase completion when cart is not empty. 
- 	- On submission of form, sneds user to order page.
+ - `cart-page`
+	- Displays the checkout page and handles the entire checkout process.
+	- Contains a form with fields to fill out to complete order.
+	- Shows products that have been "added" to cart.
+	- Only displays total and allows purchase completion when cart is not empty. 
+	- On submission of form, sneds user to order page.
+	- Display `Remove Product` button to remove individual products from cart.
 
 ### Order Components
 When the user submits the form from the `cart-page` component, it returns a order successful page.
 
 Also shows a "no order found" page with a return button.
+
+## Form Validation
+
+### Cart Component
+Each input field on the checkout page form has its own validation check using `ngModelChange` and `ngIf`.
+
+#### `ngModelChange`
+- `validateName`
+	- Checks name field is not empty and creates Window Alert "Fullname is required"
+	- Checks if name `length < 1` OR `length > 16` and creates Windows Alert "Fullname must be at least 3 characters and no more than 16 characters"
+	- Check if name contains numbers and create Window Alert "Fullname cannot contain numbers"
+
+- `validateAddress`
+	- Checks address field is not empty and creates Window Alert "Address is required"
+	- Checks if name `length < 1` and creates Windows Alert "Address must be at least 7 characters"
+
+- `validateCreditCard`
+	- Checks credit card field is not empty and creates Window Alert "Credit Card is required"
+	- Checks if field contains letters and creates Window Alert "Credit Card cannot contain letters"
+	- Checks if field `length < 1` OR `length > 16` and creates Windows Alert "Credit Card must be at least 16 characters"
+
+#### HTML `ngIf`
+- Name
+	- Checks if name field is `invalid` and `dirty`
+	- Checks if field is empty and uses `required` to create div saying "Fullname is required"
+	- Checks if field doesn't match `pattern` and creates div saying "Fullname cannot have numbers"
+	- Checks if field length is more than `minlength` and creates div saying "Name must be at least 3 characters long"
+
+- Address
+	- Checks if address field is `invalid` and `dirty`
+	- Checks if field is empty and uses `required` to create div saying "Address is required"
+	- Checks if field length is more than `minlength` and creates div saying "Address must be at least 7 characters long"
+
+- Credit Card
+	- Checks if credit card field is `invalid` and `dirty`
+	- Checks if field is empty and uses `required` to create div saying "Credit card field is required"
+	- Checks if field doesn't match `pattern` and creates div saying "Fullname cannot have numbers"
+	- Checks if field length is more than `minlength` and creates div saying "Credit Card Number must be at least 16 characters long"
